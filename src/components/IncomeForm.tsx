@@ -107,7 +107,7 @@ export function IncomeForm({ defaultValues, onSubmit }: IncomeFormProps) {
                     <FormLabel>Currency</FormLabel>
                     <Select 
                       onValueChange={field.onChange} 
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
