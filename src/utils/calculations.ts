@@ -100,25 +100,25 @@ export const getVerdictDetails = (verdict: "worthless" | "whatever" | "worth" | 
       emoji: "😞",
       title: "Worthless",
       description: "This doesn't seem like a good use of your money.",
-      color: "worth-worthless"
+      color: verdict
     },
     whatever: {
       emoji: "😶",
       title: "Whatever",
       description: "It's not terrible, but you could find better ways to spend your money.",
-      color: "worth-whatever"
+      color: verdict
     },
     worth: {
       emoji: "😁",
       title: "Worth it",
       description: "This is a good investment of your money!",
-      color: "worth-worth"
+      color: verdict
     },
     justdoit: {
       emoji: "😱",
       title: "Just do it!",
       description: "This is an amazing value. Don't hesitate!",
-      color: "worth-justdoit"
+      color: verdict
     }
   };
 

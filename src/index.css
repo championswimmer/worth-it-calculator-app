@@ -35,6 +35,19 @@
     --input: 220 13% 91%;
     --ring: 245 80% 67%;
 
+    /* Verdict colors - RGB values for styling with JavaScript */
+    --worthless-light-rgb: 239, 68, 68;   /* Red-500 */
+    --worthless-dark-rgb: 248, 113, 113;  /* Red-400 */
+
+    --whatever-light-rgb: 245, 158, 11;   /* Amber-500 */
+    --whatever-dark-rgb: 251, 191, 36;    /* Amber-400 */
+
+    --worth-light-rgb: 16, 185, 129;      /* Emerald-500 */
+    --worth-dark-rgb: 52, 211, 153;       /* Emerald-400 */
+
+    --justdoit-light-rgb: 99, 102, 241;   /* Indigo-500 */
+    --justdoit-dark-rgb: 129, 140, 248;   /* Indigo-400 */
+
     --radius: 0.5rem;
   }
 
@@ -60,7 +73,8 @@
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    /* Modified destructive color to be more visible in dark mode - lighter shade of red */
+    --destructive: 0 84.2% 72%; /* Lighter red shade for dark mode */
     --destructive-foreground: 210 20% 98%;
 
     --border: 215 27.9% 16.9%;

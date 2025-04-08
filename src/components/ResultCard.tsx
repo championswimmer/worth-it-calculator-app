@@ -6,6 +6,7 @@ import { Currency, GoalResult } from "@/types";
 import { formatCurrency, formatTime, getVerdictDetails } from "@/utils/calculations";
 import { ArrowLeft, Twitter } from "lucide-react";
 import { useRef } from "react";
+import { useTheme } from "next-themes";
 
 interface ResultCardProps {
   result: GoalResult;
@@ -16,6 +17,7 @@ interface ResultCardProps {
 export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   const verdictDetails = getVerdictDetails(result.verdict);
   const cardRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   
   // Mapping verdict colors to appropriate text colors
   const textColorMap = {
@@ -36,12 +38,18 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   
   return (
     <Card ref={cardRef} className="w-full max-w-md mx-auto animate-fade-in">
-      <CardHeader className={`bg-${verdictDetails.color} rounded-t-lg`}>
-        <CardTitle className={`text-center text-2xl flex flex-col items-center ${headerTextColor}`}>
+      <CardHeader className="rounded-t-lg" style={{
+        backgroundColor: `rgba(var(--${verdictDetails.color}-${theme === 'dark' ? 'dark' : 'light'}-rgb), 0.2)`
+      }}>
+        <CardTitle className="text-center text-2xl flex flex-col items-center" style={{
+          color: `rgb(var(--${verdictDetails.color}-${theme === 'dark' ? 'dark' : 'light'}-rgb))`
+        }}>
           <span className="text-5xl mb-2">{verdictDetails.emoji}</span>
           <span>{verdictDetails.title}</span>
         </CardTitle>
-        <CardDescription className={`text-center ${headerTextColor} bg-opacity-70`}>
+        <CardDescription className="text-center" style={{
+          color: `rgba(var(--${verdictDetails.color}-${theme === 'dark' ? 'dark' : 'light'}-rgb), 0.8)`
+        }}>
           {verdictDetails.description}
         </CardDescription>
       </CardHeader>

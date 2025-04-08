@@ -81,5 +81,17 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
-  }
+  },
+  "description": "Calculate if your goals are worth splurging your cash on!",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/championswimmer/worth-it-calculator-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/championswimmer/worth-it-calculator-app/issues"
+  },
+  "homepage": "https://github.com/championswimmer/worth-it-calculator-app#readme"
 }

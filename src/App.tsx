@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { initPostHog } from "./utils/analytics";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import {ThemeProvider} from "next-themes";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +19,8 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -31,6 +33,7 @@ const App = () => {
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
+      </ThemeProvider>
   );
 };
 

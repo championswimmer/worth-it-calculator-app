@@ -37,6 +37,10 @@ export default {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
+				error: {
+					light: '#EF4444', // Red-500 for light mode
+					dark: '#F87171',  // Red-400 for dark mode (lighter shade)
+				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
 					foreground: 'hsl(var(--muted-foreground))'
@@ -64,10 +68,22 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				worth: {
-					worthless: '#EF4444',
-					whatever: '#F59E0B',
-					worth: '#10B981',
-					justdoit: '#6366F1'
+					worthless: {
+						light: '#EF4444', // Red-500
+						dark: '#F87171',  // Red-400 (lighter for dark mode)
+					},
+					whatever: {
+						light: '#F59E0B', // Amber-500
+						dark: '#FBBF24',  // Amber-400 (lighter for dark mode)
+					},
+					worth: {
+						light: '#10B981', // Emerald-500
+						dark: '#34D399',  // Emerald-400 (lighter for dark mode)
+					},
+					justdoit: {
+						light: '#6366F1', // Indigo-500
+						dark: '#818CF8',  // Indigo-400 (lighter for dark mode)
+					}
 				}
 			},
 			borderRadius: {
