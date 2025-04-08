@@ -17,6 +17,19 @@
     <meta name="twitter:image" content="/og_image.png" />
   </head>
 
+  <!-- Dark mode script to prevent flashing on load -->
+  <script>
+    // Check for saved theme preference or use system preference
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
   <body>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->

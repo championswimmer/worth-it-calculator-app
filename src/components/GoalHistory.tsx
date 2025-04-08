@@ -12,6 +12,7 @@ import {
 import { Currency, GoalResult } from "@/types";
 import { formatCurrency, getVerdictDetails } from "@/utils/calculations";
 import { Trash } from "lucide-react";
+import {useTheme} from "next-themes";
 
 interface GoalHistoryProps {
   goals: GoalResult[];
@@ -20,6 +21,8 @@ interface GoalHistoryProps {
 }
 
 export function GoalHistory({ goals, currency, onClearHistory }: GoalHistoryProps) {
+  const { theme } = useTheme();
+
   if (goals.length === 0) {
     return null;
   }
@@ -54,7 +57,13 @@ export function GoalHistory({ goals, currency, onClearHistory }: GoalHistoryProp
                   <TableCell>{formatCurrency(goal.cost, currency)}</TableCell>
                   <TableCell>{Math.round(goal.goalScore)}/100</TableCell>
                   <TableCell className="text-right">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${verdictDetails.color}/20 text-${verdictDetails.color}`}>
+                    <span
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                        style={{
+                          backgroundColor: `rgba(var(--${verdictDetails.color}-${theme === 'dark' ? 'dark' : 'light'}-rgb), 0.2)`,
+                          color: `rgb(var(--${verdictDetails.color}-${theme === 'dark' ? 'dark' : 'light'}-rgb))`
+                        }}
+                    >
                       {verdictDetails.emoji} {verdictDetails.title}
                     </span>
                   </TableCell>

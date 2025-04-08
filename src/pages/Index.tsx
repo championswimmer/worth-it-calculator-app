@@ -9,6 +9,7 @@ import { getGoalsFromStorage, getIncomeFromStorage, saveGoalToStorage, saveIncom
 import { trackGoalSaved, trackIncomeSaved } from "@/utils/analytics";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const Index = () => {
   const { toast } = useToast();
@@ -81,6 +82,9 @@ const Index = () => {
   return (
     <div className="min-h-screen py-10 px-4">
       <header className="text-center mb-10">
+        <div className="absolute right-0 top-0 p-2">
+          <ThemeToggle />
+        </div>
         <h1 className="text-4xl font-bold text-primary">Worth It?</h1>
         <p className="text-muted-foreground mt-2">Determine if that purchase is really worth your hard-earned money</p>
       </header>
