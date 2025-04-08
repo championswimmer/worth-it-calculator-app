@@ -6,6 +6,7 @@ import { GoalHistory } from "@/components/GoalHistory";
 import { Goal, GoalResult, IncomeDetails, SavingsBreakdown } from "@/types";
 import { calculateGoalResult } from "@/utils/calculations";
 import { getGoalsFromStorage, getIncomeFromStorage, saveGoalToStorage, saveIncomeToStorage } from "@/utils/localStorage";
+import { trackGoalSaved, trackIncomeSaved } from "@/utils/analytics";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -32,6 +33,10 @@ const Index = () => {
     setIncomeDetails(data);
     setSavingsBreakdown(savings);
     saveIncomeToStorage(data);
+    
+    // Track event: income details saved
+    trackIncomeSaved(data);
+    
     setStage('goal');
   };
   
@@ -52,6 +57,9 @@ const Index = () => {
     const updatedHistory = [result, ...goalHistory];
     setGoalHistory(updatedHistory);
     saveGoalToStorage(result);
+    
+    // Track event: goal saved
+    trackGoalSaved(goal, incomeDetails.currency);
     
     setStage('result');
   };

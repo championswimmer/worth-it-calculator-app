@@ -41,11 +41,15 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
   });
   
   const handleSubmit = (data: z.infer<typeof goalFormSchema>) => {
+    // Ensure all required properties are set for Goal type
     const goal: Goal = {
-      ...data,
       id: crypto.randomUUID(),
-      timestamp: Date.now(),
+      name: data.name,
+      cost: data.cost,
+      type: data.type,
+      years: data.years,
       impact: data.impact as 1 | 2 | 3 | 4,
+      timestamp: Date.now(),
     };
     
     onSubmit(goal);
