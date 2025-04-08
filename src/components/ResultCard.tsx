@@ -28,7 +28,7 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   const headerTextColor = textColorMap[`worth/${result.verdict}`] || 'text-gray-900';
   
   const handleShareToTwitter = async () => {
-    const shareText = `I just found out that spending my money for ${result.name} is ${verdictDetails.title} using Worth It calculator by @championswimmer. Calculate yourself on https://worthit.arnav.tech`;
+    const shareText = `I just checked if it is worth spending ${formatCurrency(result.cost, currency)} my savings for ${result.name} is worth it and got a verdict of ${verdictDetails.emoji} ${verdictDetails.title} ${Math.round(result.goalScore)}/100! Check your score at https://worthit.arnav.tech/ - @championswimmer`;
     
     // Open Twitter share URL in a new window
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
