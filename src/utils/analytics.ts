@@ -5,8 +5,8 @@ import { Currency, Goal, IncomeDetails } from '@/types';
 // Initialize PostHog
 export const initPostHog = () => {
   // Replace with your actual PostHog API key
-  const POSTHOG_API_KEY = 'phc_your_api_key'; // You should replace this with your actual API key
-  const POSTHOG_HOST = 'https://app.posthog.com'; // or your self-hosted instance URL
+  const POSTHOG_API_KEY = 'phc_LsJgiopvzLDHKzVedMtGh4F6ZY8hUTk8MkKUqTImyVR'; // You should replace this with your actual API key
+  const POSTHOG_HOST = 'https://us.i.posthog.com'; // or your self-hosted instance URL
   
   posthog.init(POSTHOG_API_KEY, {
     api_host: POSTHOG_HOST,
