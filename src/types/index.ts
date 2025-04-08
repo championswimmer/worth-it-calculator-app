@@ -23,7 +23,7 @@ export interface Goal {
   cost: number;
   type: "product" | "experience";
   years: number; // years of use (product) or years of memory (experience)
-  impact: 1 | 2 | 3 | 4; // impact level
+  impact: 1 | 2 | 3 | 4 | 5; // impact level
   timestamp: number; // when created
 }
 
@@ -35,7 +35,6 @@ export interface GoalResult extends Goal {
     months: number;
     years: number;
   };
-  expToCostRatio: number;
   goalScore: number;
   verdict: "worthless" | "whatever" | "worth" | "justdoit";
 }

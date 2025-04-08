@@ -23,12 +23,12 @@ const goalFormSchema = z.object({
   cost: z.coerce.number().min(1, "Cost must be greater than 0"),
   type: z.enum(["product", "experience"]),
   years: z.coerce.number().min(1, "Must be at least 1 year"),
-  impact: z.coerce.number().min(1).max(4),
+  impact: z.coerce.number().min(1).max(5, "Impact must be between 1 and 5"),
 });
 
 export function GoalForm({ income, onSubmit }: GoalFormProps) {
   const [selectedType, setSelectedType] = useState<"product" | "experience">("product");
-  
+
   const form = useForm<z.infer<typeof goalFormSchema>>({
     resolver: zodResolver(goalFormSchema),
     defaultValues: {
@@ -39,7 +39,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
       impact: 2,
     },
   });
-  
+
   const handleSubmit = (data: z.infer<typeof goalFormSchema>) => {
     // Ensure all required properties are set for Goal type
     const goal: Goal = {
@@ -51,45 +51,47 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
       impact: data.impact as 1 | 2 | 3 | 4,
       timestamp: Date.now(),
     };
-    
+
     onSubmit(goal);
   };
-  
+
   // Handle radio button change
   const handleTypeChange = (value: "product" | "experience") => {
     setSelectedType(value);
-    
+
     // Reset the years field based on type
     form.setValue("years", value === "product" ? 5 : 20);
     form.setValue("impact", 2);
   };
-  
-  const impactOptions = selectedType === "product" 
+
+  const impactOptions = selectedType === "product"
     ? [
-      { value: 1, label: "Nice to have" },
-      { value: 2, label: "Really useful" },
-      { value: 3, label: "Need it badly" },
+      { value: 1, label: "Don't need it" },
+      { value: 2, label: "Nice to have" },
+      { value: 3, label: "Really want it" },
       { value: 4, label: "Dying for it" },
+      { value: 5, label: "Life changing" },
     ]
     : [
-      { value: 1, label: "Enjoy it" },
-      { value: 2, label: "Remember it fondly" },
-      { value: 3, label: "Cherish the memory" },
-      { value: 4, label: "Once in a lifetime" },
+      { value: 1, label: "Like any other day" },
+      { value: 2, label: "Think of it fondly" },
+      { value: 3, label: "Enjoy it a lot" },
+      { value: 4, label: "Cherished memory" },
+      { value: 5, label: "Once in a lifetime" },
     ];
-  
+
   return (
     <Card className="w-full max-w-md mx-auto animate-fade-in">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Target className="h-5 w-5" /> 
+          <Target className="h-5 w-5" />
           Set Your Goal
         </CardTitle>
         <CardDescription>
           Define what you want to save for and how much it means to you.
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -100,7 +102,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 <FormItem>
                   <FormLabel>Goal Name</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       {...field}
                       placeholder="e.g., New iPhone, Bali Vacation"
                     />
@@ -109,7 +111,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="cost"
@@ -117,9 +119,9 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 <FormItem>
                   <FormLabel>Cost ({currencySymbols[income.currency]})</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       {...field}
-                      type="number" 
+                      type="number"
                       placeholder="0"
                     />
                   </FormControl>
@@ -127,7 +129,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="type"
@@ -169,14 +171,14 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="years"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {selectedType === "product" 
+                    {selectedType === "product"
                       ? `How many years will this last: ${field.value}`
                       : `How long will you remember this: ${field.value} years`}
                   </FormLabel>
@@ -193,18 +195,18 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="impact"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {selectedType === "product" 
+                    {selectedType === "product"
                       ? "How much do you want it"
                       : "How much will you love the experience"}
                   </FormLabel>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-5 gap-2">
                     {impactOptions.map((option) => (
                       <button
                         key={option.value}
@@ -221,7 +223,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end">
               <Button type="submit">
                 Calculate <ArrowRight className="ml-2 h-4 w-4" />

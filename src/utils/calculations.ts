@@ -11,19 +11,19 @@ export const currencySymbols: Record<Currency, string> = {
 export const calculateSavings = (income: IncomeDetails): SavingsBreakdown => {
   // Calculate monthly savings
   const monthlySavings = income.monthlyIncome * (income.savingsPercentage / 100);
-  
+
   // Calculate annual savings
   const annualSavings = monthlySavings * 12;
-  
+
   // Calculate weekly savings
   const weeklySavings = annualSavings / 52;
-  
+
   // Calculate daily savings
   const dailySavings = weeklySavings / income.daysPerWeek;
-  
+
   // Calculate hourly savings
   const hourlySavings = dailySavings / income.hoursPerDay;
-  
+
   return {
     annual: annualSavings,
     monthly: monthlySavings,
@@ -34,11 +34,11 @@ export const calculateSavings = (income: IncomeDetails): SavingsBreakdown => {
 };
 
 export const calculateGoalResult = (
-  goal: Goal, 
+  goal: Goal,
   income: IncomeDetails
 ): GoalResult => {
   const savings = calculateSavings(income);
-  
+
   // Calculate time needed to save for this goal
   const savingsTime = {
     hours: goal.cost / savings.hourly,
@@ -47,16 +47,18 @@ export const calculateGoalResult = (
     months: goal.cost / savings.monthly,
     years: goal.cost / savings.annual
   };
-  
-  // Calculate expToCostRatio = goal experience years / goal cost in years
-  const expToCostRatio = goal.years / savingsTime.years;
-  
-  // Calculate goal score: goalScore = expToCostRatio * impact
-  let goalScore = expToCostRatio * goal.impact;
-  
+
+  // =SQRT(((O2*365*24*2)/L2) * O2 * POW(P2, 2.2)) * 0.75
+  // O2 = goal.years
+  // L2 = savingsTime.days
+  // P2 = goal.impact
+
+  // Calculate goal score
+  let goalScore = Math.sqrt(((goal.years * 365 * 24 * 2) / savingsTime.hours) * goal.years * Math.pow(goal.impact, 2.2)) * 0.75;
+
   // Limit the score to 100
   goalScore = Math.min(100, goalScore);
-  
+
   // Determine verdict
   let verdict: "worthless" | "whatever" | "worth" | "justdoit";
   if (goalScore < 50) {
@@ -68,11 +70,10 @@ export const calculateGoalResult = (
   } else {
     verdict = "justdoit";
   }
-  
+
   return {
     ...goal,
     savingsTime,
-    expToCostRatio,
     goalScore,
     verdict
   };
@@ -120,6 +121,6 @@ export const getVerdictDetails = (verdict: "worthless" | "whatever" | "worth" | 
       color: "worth-justdoit"
     }
   };
-  
+
   return details[verdict];
 };
