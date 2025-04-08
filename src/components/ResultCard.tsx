@@ -18,11 +18,11 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   return (
     <Card className="w-full max-w-md mx-auto animate-fade-in">
       <CardHeader className={`bg-${verdictDetails.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-center text-2xl flex flex-col items-center">
+        <CardTitle className="text-center text-2xl flex flex-col items-center text-white">
           <span className="text-5xl mb-2">{verdictDetails.emoji}</span>
           <span>{verdictDetails.title}</span>
         </CardTitle>
-        <CardDescription className="text-white/80 text-center">
+        <CardDescription className={`text-white/80 text-center text-white/70`}>
           {verdictDetails.description}
         </CardDescription>
       </CardHeader>
@@ -91,3 +91,4 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
     </Card>
   );
 }
+
