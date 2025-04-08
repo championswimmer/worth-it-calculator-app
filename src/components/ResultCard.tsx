@@ -4,7 +4,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from "@/components/ui/progress";
 import { Currency, GoalResult } from "@/types";
 import { formatCurrency, formatTime, getVerdictDetails } from "@/utils/calculations";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Twitter } from "lucide-react";
+import { useRef } from "react";
 
 interface ResultCardProps {
   result: GoalResult;
@@ -14,6 +15,7 @@ interface ResultCardProps {
 
 export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   const verdictDetails = getVerdictDetails(result.verdict);
+  const cardRef = useRef<HTMLDivElement>(null);
   
   // Mapping verdict colors to appropriate text colors
   const textColorMap = {
@@ -25,8 +27,15 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
 
   const headerTextColor = textColorMap[`worth/${result.verdict}`] || 'text-gray-900';
   
+  const handleShareToTwitter = async () => {
+    const shareText = `I just found out that spending my money for ${result.name} is ${verdictDetails.title} using Worth It calculator by @championswimmer. Calculate yourself on https://worthit.arnav.tech`;
+    
+    // Open Twitter share URL in a new window
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+  };
+  
   return (
-    <Card className="w-full max-w-md mx-auto animate-fade-in">
+    <Card ref={cardRef} className="w-full max-w-md mx-auto animate-fade-in">
       <CardHeader className={`bg-${verdictDetails.color} rounded-t-lg`}>
         <CardTitle className={`text-center text-2xl flex flex-col items-center ${headerTextColor}`}>
           <span className="text-5xl mb-2">{verdictDetails.emoji}</span>
@@ -93,7 +102,14 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
         </div>
       </CardContent>
       
-      <CardFooter>
+      <CardFooter className="flex flex-col space-y-2">
+        <Button 
+          onClick={handleShareToTwitter} 
+          variant="default" 
+          className="w-full bg-[#1DA1F2] hover:bg-[#1a94df]"
+        >
+          <Twitter className="mr-2 h-4 w-4" /> Share on Twitter
+        </Button>
         <Button onClick={onReset} variant="outline" className="w-full">
           <ArrowLeft className="mr-2 h-4 w-4" /> Calculate Another Goal
         </Button>
