@@ -15,14 +15,24 @@ interface ResultCardProps {
 export function ResultCard({ result, currency, onReset }: ResultCardProps) {
   const verdictDetails = getVerdictDetails(result.verdict);
   
+  // Mapping verdict colors to appropriate text colors
+  const textColorMap = {
+    'worth/justdoit': 'text-indigo-900',
+    'worth/worth': 'text-green-900',
+    'worth/whatever': 'text-yellow-900',
+    'worth/worthless': 'text-red-900'
+  };
+
+  const headerTextColor = textColorMap[`worth/${result.verdict}`] || 'text-gray-900';
+  
   return (
     <Card className="w-full max-w-md mx-auto animate-fade-in">
-      <CardHeader className={`bg-${verdictDetails.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-center text-2xl flex flex-col items-center text-white">
+      <CardHeader className={`bg-${verdictDetails.color} rounded-t-lg`}>
+        <CardTitle className={`text-center text-2xl flex flex-col items-center ${headerTextColor}`}>
           <span className="text-5xl mb-2">{verdictDetails.emoji}</span>
           <span>{verdictDetails.title}</span>
         </CardTitle>
-        <CardDescription className={`text-white/80 text-center text-white/70`}>
+        <CardDescription className={`text-center ${headerTextColor} bg-opacity-70`}>
           {verdictDetails.description}
         </CardDescription>
       </CardHeader>
@@ -91,4 +101,3 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
     </Card>
   );
 }
-
