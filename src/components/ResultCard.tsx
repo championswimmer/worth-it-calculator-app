@@ -97,7 +97,7 @@ export function ResultCard({ result, currency, onReset }: ResultCardProps) {
           </div>
           <div>
             <div className="text-muted-foreground">Impact Level</div>
-            <div className="font-medium">{result.impact}/4</div>
+            <div className="font-medium">{result.impact}/5</div>
           </div>
         </div>
       </CardContent>

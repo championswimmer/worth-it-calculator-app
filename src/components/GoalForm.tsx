@@ -48,7 +48,7 @@ export function GoalForm({ income, onSubmit }: GoalFormProps) {
       cost: data.cost,
       type: data.type,
       years: data.years,
-      impact: data.impact as 1 | 2 | 3 | 4,
+      impact: data.impact as 1 | 2 | 3 | 4 | 5,
       timestamp: Date.now(),
     };
 
