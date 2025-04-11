@@ -1,4 +1,3 @@
-
 import { IncomeForm } from "@/components/IncomeForm";
 import { GoalForm } from "@/components/GoalForm";
 import { ResultCard } from "@/components/ResultCard";
@@ -18,7 +17,8 @@ const Index = () => {
   const [savingsBreakdown, setSavingsBreakdown] = useState<SavingsBreakdown | null>(null);
   const [currentResult, setCurrentResult] = useState<GoalResult | null>(null);
   const [goalHistory, setGoalHistory] = useState<GoalResult[]>([]);
-  
+  const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
+
   // Load saved data on component mount
   useEffect(() => {
     const savedIncome = getIncomeFromStorage();
@@ -63,10 +63,17 @@ const Index = () => {
     trackGoalSaved(goal, incomeDetails.currency);
     
     setStage('result');
+    setEditingGoal(null);
+  };
+
+  const handleEditGoal = (goal: Goal) => {
+    setEditingGoal(goal);
+    setStage('goal');
   };
   
   const handleReset = () => {
     setStage('goal');
+    setEditingGoal(null);
   };
   
   const handleClearHistory = () => {
@@ -101,6 +108,7 @@ const Index = () => {
           <GoalForm 
             income={incomeDetails} 
             onSubmit={handleGoalSubmit} 
+            editingGoal={editingGoal}
           />
         )}
         
@@ -116,6 +124,7 @@ const Index = () => {
               goals={goalHistory}
               currency={incomeDetails.currency}
               onClearHistory={handleClearHistory}
+              onEditGoal={handleEditGoal}
             />
           </>
         )}

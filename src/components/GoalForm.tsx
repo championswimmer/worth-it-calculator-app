@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -16,6 +15,7 @@ import { z } from "zod";
 interface GoalFormProps {
   income: IncomeDetails;
   onSubmit: (goal: Goal) => void;
+  editingGoal?: Goal | null;
 }
 
 const goalFormSchema = z.object({
@@ -26,59 +26,58 @@ const goalFormSchema = z.object({
   impact: z.coerce.number().min(1).max(5, "Impact must be between 1 and 5"),
 });
 
-export function GoalForm({ income, onSubmit }: GoalFormProps) {
-  const [selectedType, setSelectedType] = useState<"product" | "experience">("product");
+export function GoalForm({ income, onSubmit, editingGoal }: GoalFormProps) {
+  const [selectedType, setSelectedType] = useState<"product" | "experience">(
+    editingGoal?.type || "product"
+  );
 
   const form = useForm<z.infer<typeof goalFormSchema>>({
     resolver: zodResolver(goalFormSchema),
     defaultValues: {
-      name: "",
-      cost: 0,
-      type: "product",
-      years: 5,
-      impact: 2,
+      name: editingGoal?.name || "",
+      cost: editingGoal?.cost || 0,
+      type: editingGoal?.type || "product",
+      years: editingGoal?.years || 5,
+      impact: editingGoal?.impact || 2,
     },
   });
 
   const handleSubmit = (data: z.infer<typeof goalFormSchema>) => {
-    // Ensure all required properties are set for Goal type
     const goal: Goal = {
-      id: crypto.randomUUID(),
+      id: editingGoal?.id || crypto.randomUUID(),
       name: data.name,
       cost: data.cost,
       type: data.type,
       years: data.years,
       impact: data.impact as 1 | 2 | 3 | 4 | 5,
-      timestamp: Date.now(),
+      timestamp: editingGoal?.timestamp || Date.now(),
     };
 
     onSubmit(goal);
   };
 
-  // Handle radio button change
   const handleTypeChange = (value: "product" | "experience") => {
     setSelectedType(value);
-
-    // Reset the years field based on type
     form.setValue("years", value === "product" ? 5 : 20);
     form.setValue("impact", 2);
   };
 
-  const impactOptions = selectedType === "product"
-    ? [
-      { value: 1, label: "Don't need it" },
-      { value: 2, label: "Nice to have" },
-      { value: 3, label: "Really want it" },
-      { value: 4, label: "Dying for it" },
-      { value: 5, label: "Life changing" },
-    ]
-    : [
-      { value: 1, label: "Like any other day" },
-      { value: 2, label: "Think of it fondly" },
-      { value: 3, label: "Enjoy it a lot" },
-      { value: 4, label: "Cherished memory" },
-      { value: 5, label: "Once in a lifetime" },
-    ];
+  const impactOptions =
+    selectedType === "product"
+      ? [
+          { value: 1, label: "Don't need it" },
+          { value: 2, label: "Nice to have" },
+          { value: 3, label: "Really want it" },
+          { value: 4, label: "Dying for it" },
+          { value: 5, label: "Life changing" },
+        ]
+      : [
+          { value: 1, label: "Like any other day" },
+          { value: 2, label: "Think of it fondly" },
+          { value: 3, label: "Enjoy it a lot" },
+          { value: 4, label: "Cherished memory" },
+          { value: 5, label: "Once in a lifetime" },
+        ];
 
   return (
     <Card className="w-full max-w-md mx-auto animate-fade-in">

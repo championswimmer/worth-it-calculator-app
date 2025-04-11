@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,16 +10,17 @@ import {
 } from "@/components/ui/table";
 import { Currency, GoalResult } from "@/types";
 import { formatCurrency, getVerdictDetails } from "@/utils/calculations";
-import { Trash } from "lucide-react";
+import { Trash, Edit } from "lucide-react";
 import {useTheme} from "next-themes";
 
 interface GoalHistoryProps {
   goals: GoalResult[];
   currency: Currency;
   onClearHistory: () => void;
+  onEditGoal: (goal: GoalResult) => void;
 }
 
-export function GoalHistory({ goals, currency, onClearHistory }: GoalHistoryProps) {
+export function GoalHistory({ goals, currency, onClearHistory, onEditGoal }: GoalHistoryProps) {
   const { theme } = useTheme();
 
   if (goals.length === 0) {
@@ -44,6 +44,7 @@ export function GoalHistory({ goals, currency, onClearHistory }: GoalHistoryProp
               <TableHead>Cost</TableHead>
               <TableHead>Score</TableHead>
               <TableHead className="text-right">Verdict</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -66,6 +67,11 @@ export function GoalHistory({ goals, currency, onClearHistory }: GoalHistoryProp
                     >
                       {verdictDetails.emoji} {verdictDetails.title}
                     </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="outline" size="sm" onClick={() => onEditGoal(goal)}>
+                      <Edit className="h-4 w-4 mr-2" /> Edit
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
