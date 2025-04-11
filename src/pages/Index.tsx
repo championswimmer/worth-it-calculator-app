@@ -51,13 +51,20 @@ const Index = () => {
       return;
     }
     
-    const result = calculateGoalResult(goal, incomeDetails);
-    setCurrentResult(result);
-    
-    // Add to history and save
-    const updatedHistory = [result, ...goalHistory];
-    setGoalHistory(updatedHistory);
-    saveGoalToStorage(result);
+    const existingGoalIndex = goalHistory.findIndex(g => g.id === goal.id);
+    if (existingGoalIndex !== -1) {
+      // If goal with the same id exists, overwrite it
+      const updatedHistory = [...goalHistory];
+      updatedHistory[existingGoalIndex] = calculateGoalResult(goal, incomeDetails);
+      setGoalHistory(updatedHistory);
+      saveGoalToStorage(updatedHistory[existingGoalIndex]);
+    } else {
+      // If goal with the same id does not exist, add the new goal
+      const result = calculateGoalResult(goal, incomeDetails);
+      const updatedHistory = [result, ...goalHistory];
+      setGoalHistory(updatedHistory);
+      saveGoalToStorage(result);
+    }
     
     // Track event: goal saved
     trackGoalSaved(goal, incomeDetails.currency);
