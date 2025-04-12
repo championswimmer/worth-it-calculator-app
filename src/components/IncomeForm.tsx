@@ -1,4 +1,4 @@
-
+import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -10,7 +10,6 @@ import { Currency, IncomeDetails, SavingsBreakdown } from "@/types";
 import { calculateSavings, currencySymbols, formatCurrency } from "@/utils/calculations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Calculator } from "lucide-react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -83,24 +82,6 @@ export function IncomeForm({ defaultValues, onSubmit }: IncomeFormProps) {
             <div className="flex gap-4">
               <FormField
                 control={form.control}
-                name="monthlyIncome"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Monthly Income</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
                 name="currency"
                 render={({ field }) => (
                   <FormItem className="w-24">
@@ -122,6 +103,24 @@ export function IncomeForm({ defaultValues, onSubmit }: IncomeFormProps) {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="monthlyIncome"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Monthly Income</FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        type="number" 
+                        placeholder="0" 
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
