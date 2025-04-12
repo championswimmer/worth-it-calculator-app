@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/components/ui/use-toast";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Currency, IncomeDetails, SavingsBreakdown } from "@/types";
 import { calculateSavings, currencySymbols, formatCurrency } from "@/utils/calculations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Calculator } from "lucide-react";
+import { ArrowRight, Calculator, HelpCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -113,7 +115,21 @@ export function IncomeForm({ defaultValues, onSubmit }: IncomeFormProps) {
                 name="monthlyIncome"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Monthly Income</FormLabel>
+                    <FormLabel className="flex items-center gap-2">
+                      Monthly Income
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="cursor-help">
+                            <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          You can either enter pre-tax or post-tax income.
+                          <br /><br />
+                          If you earn $100, of which $30 is tax, $35 is expense and $35 is savings, you can enter either {"{income=100, savings=35%}"} or you can enter {"{income=70, savings=50%}"}
+                        </TooltipContent>
+                      </Tooltip>
+                    </FormLabel>
                     <FormControl>
                       <Input 
                         {...field} 
