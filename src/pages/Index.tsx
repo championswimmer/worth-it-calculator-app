@@ -9,6 +9,7 @@ import { trackGoalSaved, trackIncomeSaved } from "@/utils/analytics";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { DollarSign, CheckCircle2, Goal as GoalIcon } from "lucide-react";
 
 const Index = () => {
   const { toast } = useToast();
@@ -19,7 +20,6 @@ const Index = () => {
   const [goalHistory, setGoalHistory] = useState<GoalResult[]>([]);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
 
-  // Load saved data on component mount
   useEffect(() => {
     const savedIncome = getIncomeFromStorage();
     if (savedIncome) {
@@ -35,7 +35,6 @@ const Index = () => {
     setSavingsBreakdown(savings);
     saveIncomeToStorage(data);
     
-    // Track event: income details saved
     trackIncomeSaved(data);
     
     setStage('goal');
@@ -54,12 +53,10 @@ const Index = () => {
     const result = calculateGoalResult(goal, incomeDetails);
     setCurrentResult(result);
     
-    // Add to history and save
     const updatedHistory = [result, ...goalHistory];
     setGoalHistory(updatedHistory);
     saveGoalToStorage(result);
     
-    // Track event: goal saved
     trackGoalSaved(goal, incomeDetails.currency);
     
     setStage('result');
@@ -86,6 +83,12 @@ const Index = () => {
     });
   };
   
+  const stages = [
+    { name: 'Income', icon: DollarSign, active: stage === 'income' },
+    { name: 'Goal', icon: GoalIcon, active: stage === 'goal' },
+    { name: 'Result', icon: CheckCircle2, active: stage === 'result' }
+  ];
+  
   return (
     <div className="min-h-screen py-10 px-4">
       <header className="text-center mb-10">
@@ -94,6 +97,20 @@ const Index = () => {
         </div>
         <h1 className="text-4xl font-bold text-primary">Worth It?</h1>
         <p className="text-muted-foreground mt-2">Determine if that purchase is really worth your hard-earned money</p>
+
+        <div className="flex justify-center items-center gap-4 mt-8">
+          {stages.map((s, i) => (
+            <div key={s.name} className="flex items-center">
+              {i > 0 && (
+                <div className={`h-px w-8 mx-2 ${s.active || stages[i-1].active ? 'bg-primary' : 'bg-muted'}`} />
+              )}
+              <div className={`flex items-center gap-2 ${s.active ? 'text-primary' : 'text-muted-foreground'}`}>
+                <s.icon className="h-5 w-5" />
+                <span className={`${s.active ? 'font-medium' : ''}`}>{s.name}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </header>
       
       <main className="max-w-4xl mx-auto">
