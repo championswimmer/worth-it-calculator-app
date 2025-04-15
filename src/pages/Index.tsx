@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { DollarSign, CheckCircle2, Goal as GoalIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Index = () => {
   const { toast } = useToast();
@@ -83,12 +84,25 @@ const Index = () => {
     });
   };
   
-  const stages = [
-    { name: 'Income', icon: DollarSign, active: stage === 'income' },
-    { name: 'Goal', icon: GoalIcon, active: stage === 'goal' },
-    { name: 'Result', icon: CheckCircle2, active: stage === 'result' }
-  ];
+  const handleStageClick = (clickedStage: 'income' | 'goal' | 'result') => {
+    const stageOrder = ['income', 'goal', 'result'];
+    const currentIndex = stageOrder.indexOf(stage);
+    const clickedIndex = stageOrder.indexOf(clickedStage);
+
+    if (clickedIndex < currentIndex) {
+      setStage(clickedStage);
+      if (clickedStage === 'goal') {
+        setEditingGoal(null);
+      }
+    }
+  };
   
+  const stages = [
+    { name: 'Income', icon: DollarSign, active: stage === 'income', value: 'income' as const },
+    { name: 'Goal', icon: GoalIcon, active: stage === 'goal', value: 'goal' as const },
+    { name: 'Result', icon: CheckCircle2, active: stage === 'result', value: 'result' as const }
+  ];
+
   return (
     <div className="min-h-screen py-10 px-4">
       <header className="text-center mb-10">
@@ -99,17 +113,32 @@ const Index = () => {
         <p className="text-muted-foreground mt-2">Determine if that purchase is really worth your hard-earned money</p>
 
         <div className="flex justify-center items-center gap-4 mt-8">
-          {stages.map((s, i) => (
-            <div key={s.name} className="flex items-center">
-              {i > 0 && (
-                <div className={`h-px w-8 mx-2 ${s.active || stages[i-1].active ? 'bg-primary' : 'bg-muted'}`} />
-              )}
-              <div className={`flex items-center gap-2 ${s.active ? 'text-primary' : 'text-muted-foreground'}`}>
-                <s.icon className="h-5 w-5" />
-                <span className={`${s.active ? 'font-medium' : ''}`}>{s.name}</span>
+          {stages.map((s, i) => {
+            const stageOrder = ['income', 'goal', 'result'];
+            const currentIndex = stageOrder.indexOf(stage);
+            const stageIndex = stageOrder.indexOf(s.value);
+            const isClickable = stageIndex < currentIndex;
+            
+            return (
+              <div key={s.name} className="flex items-center">
+                {i > 0 && (
+                  <div className={`h-px w-8 mx-2 ${s.active || stages[i-1].active ? 'bg-primary' : 'bg-muted'}`} />
+                )}
+                <button
+                  onClick={() => handleStageClick(s.value)}
+                  disabled={!isClickable}
+                  className={cn(
+                    "flex items-center gap-2 px-2 py-1 rounded transition-colors",
+                    s.active ? "text-primary" : "text-muted-foreground",
+                    isClickable && !s.active ? "hover:text-primary cursor-pointer" : "cursor-default"
+                  )}
+                >
+                  <s.icon className="h-5 w-5" />
+                  <span className={`${s.active ? 'font-medium' : ''}`}>{s.name}</span>
+                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </header>
       
