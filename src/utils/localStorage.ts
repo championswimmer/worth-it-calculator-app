@@ -1,3 +1,4 @@
+
 import { Goal, GoalResult, IncomeDetails } from "@/types";
 
 const INCOME_STORAGE_KEY = "worth-it-income";
@@ -21,16 +22,7 @@ export const getIncomeFromStorage = (): IncomeDetails | null => {
 
 export const saveGoalToStorage = (goal: GoalResult): void => {
   const goals = getGoalsFromStorage();
-  const existingGoalIndex = goals.findIndex(g => g.id === goal.id);
-
-  if (existingGoalIndex !== -1) {
-    // If goal with the same id exists, overwrite it
-    goals[existingGoalIndex] = goal;
-  } else {
-    // If goal with the same id does not exist, add the new goal
-    goals.push(goal);
-  }
-
+  goals.push(goal);
   localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals));
 };
 

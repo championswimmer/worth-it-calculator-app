@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -8,11 +7,10 @@ import { Slider } from "@/components/ui/slider";
 import { Currency, Goal, IncomeDetails } from "@/types";
 import { currencySymbols } from "@/utils/calculations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, HelpCircle, Target } from "lucide-react";
+import { ArrowRight, Target } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface GoalFormProps {
   income: IncomeDetails;
@@ -178,24 +176,10 @@ export function GoalForm({ income, onSubmit, editingGoal }: GoalFormProps) {
               name="years"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="flex items-center gap-2">
+                  <FormLabel>
                     {selectedType === "product"
                       ? `How many years will this last: ${field.value}`
-                      : (
-                        <>
-                          How long will you remember this: {field.value} years
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className="cursor-help">
-                                <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs">
-                              Example: for a trip to Spain, if you plan to visit Spain again within 5 years, then set this value to 5. While you remember some experiences forever, for the calculation here, enter how frequently would you have this experience.
-                            </TooltipContent>
-                          </Tooltip>
-                        </>
-                      )}
+                      : `How long will you remember this: ${field.value} years`}
                   </FormLabel>
                   <FormControl>
                     <Slider
