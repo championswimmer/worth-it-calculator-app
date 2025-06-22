@@ -26,6 +26,18 @@ export const saveGoalToStorage = (goal: GoalResult): void => {
   localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals));
 };
 
+export const updateGoalInStorage = (updatedGoal: GoalResult): void => {
+  const goals = getGoalsFromStorage();
+  const index = goals.findIndex(goal => goal.id === updatedGoal.id);
+  
+  if (index !== -1) {
+    goals[index] = updatedGoal;
+    localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals));
+  } else {
+    console.warn("Goal not found for update:", updatedGoal.id);
+  }
+}
+
 export const getGoalsFromStorage = (): GoalResult[] => {
   const stored = localStorage.getItem(GOALS_STORAGE_KEY);
   if (!stored) return [];

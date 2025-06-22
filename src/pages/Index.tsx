@@ -1,16 +1,16 @@
-import { IncomeForm } from "@/components/IncomeForm";
 import { GoalForm } from "@/components/GoalForm";
-import { ResultCard } from "@/components/ResultCard";
 import { GoalHistory } from "@/components/GoalHistory";
-import { Goal, GoalResult, IncomeDetails, SavingsBreakdown } from "@/types";
-import { calculateGoalResult } from "@/utils/calculations";
-import { getGoalsFromStorage, getIncomeFromStorage, saveGoalToStorage, saveIncomeToStorage } from "@/utils/localStorage";
-import { trackGoalSaved, trackIncomeSaved } from "@/utils/analytics";
-import { useEffect, useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { IncomeForm } from "@/components/IncomeForm";
+import { ResultCard } from "@/components/ResultCard";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { DollarSign, CheckCircle2, Goal as GoalIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { Goal, GoalResult, IncomeDetails, SavingsBreakdown } from "@/types";
+import { trackGoalSaved, trackIncomeSaved } from "@/utils/analytics";
+import { calculateGoalResult } from "@/utils/calculations";
+import { getGoalsFromStorage, getIncomeFromStorage, saveGoalToStorage, saveIncomeToStorage, updateGoalInStorage } from "@/utils/localStorage";
+import { CheckCircle2, DollarSign, Goal as GoalIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Index = () => {
   const { toast } = useToast();
@@ -26,21 +26,21 @@ const Index = () => {
     if (savedIncome) {
       setIncomeDetails(savedIncome);
     }
-    
+
     const savedGoals = getGoalsFromStorage();
     setGoalHistory(savedGoals);
   }, []);
-  
+
   const handleIncomeSubmit = (data: IncomeDetails, savings: SavingsBreakdown) => {
     setIncomeDetails(data);
     setSavingsBreakdown(savings);
     saveIncomeToStorage(data);
-    
+
     trackIncomeSaved(data);
-    
+
     setStage('goal');
   };
-  
+
   const handleGoalSubmit = (goal: Goal) => {
     if (!incomeDetails) {
       toast({
@@ -50,16 +50,35 @@ const Index = () => {
       });
       return;
     }
-    
+
     const result = calculateGoalResult(goal, incomeDetails);
     setCurrentResult(result);
-    
-    const updatedHistory = [result, ...goalHistory];
-    setGoalHistory(updatedHistory);
-    saveGoalToStorage(result);
-    
-    trackGoalSaved(goal, incomeDetails.currency);
-    
+
+    if (editingGoal) {
+      setGoalHistory(prev => {
+        const updatedHistory = prev.map(g => g.id === editingGoal.id ? result : g);
+        updateGoalInStorage(result);
+        return updatedHistory;
+      })
+
+      toast({
+        title: "Goal updated",
+        description: "Your goal has been updated successfully.",
+      });
+    }
+    else {
+      const updatedHistory = [result, ...goalHistory];
+      setGoalHistory(updatedHistory);
+      saveGoalToStorage(result);
+
+      trackGoalSaved(goal, incomeDetails.currency);
+
+      toast({
+        title: "Goal saved",
+        description: "Your goal has been saved successfully.",
+      });
+    }
+
     setStage('result');
     setEditingGoal(null);
   };
@@ -68,22 +87,22 @@ const Index = () => {
     setEditingGoal(goal);
     setStage('goal');
   };
-  
+
   const handleReset = () => {
     setStage('goal');
     setEditingGoal(null);
   };
-  
+
   const handleClearHistory = () => {
     setGoalHistory([]);
     localStorage.removeItem('worth-it-goals');
-    
+
     toast({
       title: "History cleared",
       description: "Your goal history has been cleared.",
     });
   };
-  
+
   const handleStageClick = (clickedStage: 'income' | 'goal' | 'result') => {
     const stageOrder = ['income', 'goal', 'result'];
     const currentIndex = stageOrder.indexOf(stage);
@@ -96,7 +115,7 @@ const Index = () => {
       }
     }
   };
-  
+
   const stages = [
     { name: 'Income', icon: DollarSign, active: stage === 'income', value: 'income' as const },
     { name: 'Goal', icon: GoalIcon, active: stage === 'goal', value: 'goal' as const },
@@ -118,11 +137,11 @@ const Index = () => {
             const currentIndex = stageOrder.indexOf(stage);
             const stageIndex = stageOrder.indexOf(s.value);
             const isClickable = stageIndex < currentIndex;
-            
+
             return (
               <div key={s.name} className="flex items-center">
                 {i > 0 && (
-                  <div className={`h-px w-8 mx-2 ${s.active || stages[i-1].active ? 'bg-primary' : 'bg-muted'}`} />
+                  <div className={`h-px w-8 mx-2 ${s.active || stages[i - 1].active ? 'bg-primary' : 'bg-muted'}`} />
                 )}
                 <button
                   onClick={() => handleStageClick(s.value)}
@@ -141,32 +160,32 @@ const Index = () => {
           })}
         </div>
       </header>
-      
+
       <main className="max-w-4xl mx-auto">
         {stage === 'income' && (
-          <IncomeForm 
-            defaultValues={incomeDetails} 
-            onSubmit={handleIncomeSubmit} 
+          <IncomeForm
+            defaultValues={incomeDetails}
+            onSubmit={handleIncomeSubmit}
           />
         )}
-        
+
         {stage === 'goal' && incomeDetails && (
-          <GoalForm 
-            income={incomeDetails} 
-            onSubmit={handleGoalSubmit} 
+          <GoalForm
+            income={incomeDetails}
+            onSubmit={handleGoalSubmit}
             editingGoal={editingGoal}
           />
         )}
-        
+
         {stage === 'result' && currentResult && incomeDetails && (
           <>
-            <ResultCard 
-              result={currentResult} 
+            <ResultCard
+              result={currentResult}
               currency={incomeDetails.currency}
-              onReset={handleReset} 
+              onReset={handleReset}
             />
-            
-            <GoalHistory 
+
+            <GoalHistory
               goals={goalHistory}
               currency={incomeDetails.currency}
               onClearHistory={handleClearHistory}

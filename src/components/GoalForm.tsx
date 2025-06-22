@@ -84,7 +84,7 @@ export function GoalForm({ income, onSubmit, editingGoal }: GoalFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5" />
-          Set Your Goal
+          {editingGoal ? "Update" : "Set"} Your Goal
         </CardTitle>
         <CardDescription>
           Define what you want to save for and how much it means to you.
@@ -225,7 +225,7 @@ export function GoalForm({ income, onSubmit, editingGoal }: GoalFormProps) {
 
             <div className="flex justify-end">
               <Button type="submit">
-                Calculate <ArrowRight className="ml-2 h-4 w-4" />
+                {editingGoal ? "Update" : "Calculate"} <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
           </form>
